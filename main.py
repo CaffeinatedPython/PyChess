@@ -13,13 +13,16 @@ class Square:
         self.occupied = occupied #BOOL
         self.name = name
 
+    def __repr__(self):
+        return("%s(color: %s, piece: %s, occupied: %s)" % (self.name, self.color, self.piece, str(self.occupied)))
+
 class GameBoard:
     def __init__(self):
         board = []
 
 
 def create_board():
-    board = []
+    board = {}
     for index in range(8):
         for each in ["a", "b", "c", "d", "e", "f", "g", "h"]:
             color = "white"
@@ -28,7 +31,9 @@ def create_board():
             piece = ""
             occupied = False
             name = each + str(index)
-            board.append(Square(color, piece, occupied, name))
+            board[name] = Square(color, piece, occupied, name)
+
+
 
     print(board)
 
