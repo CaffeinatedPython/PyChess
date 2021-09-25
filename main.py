@@ -33,9 +33,11 @@ def create_board():
         row = []
         for each in ["a", "b", "c", "d", "e", "f", "g", "h"]:
             color = "white"
-            if index % 2 == 0 and each in ['b', 'd', 'f', 'h']:
+            if index % 2 == 0 and each in ['a', 'c', 'e', 'g']:
+            # if index % 2 == 0 and each in ['b', 'd', 'f', 'h']:
                 color = 'black'
-            elif index % 2 == 1 and each in['a', 'c', 'e', 'g']:
+            #elif index % 2 == 1 and each in['a', 'c', 'e', 'g']:
+            elif index % 2 == 1 and each in ['b', 'd', 'f', 'h']:
                 color = 'black'
 
             keyName = (each + str(index))
