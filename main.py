@@ -10,6 +10,7 @@
 #pawn =
 
 import PySimpleGUI as sg
+import base64
 
 class Square:
     def __init__(self, color, piece, occupied, name):
@@ -36,34 +37,46 @@ def create_board():
                 color = 'black'
             elif index % 2 == 1 and each in['a', 'c', 'e', 'g']:
                 color = 'black'
-            row.append(sg.Button(button_color=color, size=(4,4), pad = (0,0), border_width=1, key=(index,each)))
-        board.append(row)
+
+            keyName = (each + str(index))
+            print(keyName)
+            row.append(sg.Button(button_text=keyName, button_color=color, size=(4,4), pad = (0,0), border_width=1, key=keyName))
+        board.insert(0,row)  #Needs insert instead of append otherwise backward
 
     return(board)
 
 
 
-
-
-
-    print(board)
 def create_window():
 
     layout = create_board()
 
-    layout += [[sg.Cancel()]]
+    layout += [[sg.Cancel(),sg.Button("Update")]]
 
    # window = sg.Window('PyChess', layout)
     return(layout)
 
 
+def image_read():
+    #piecesFolder = 'images\'
+    with open("images\wpiece.png", "rb") as img_file:
+        piece = base64.b64encode(img_file.read())
+    return(piece)
+
+
 def main():
 
     window = sg.Window('PyChess',create_window())
+
     while True:
         event, values = window.read()
         if event in (sg.WIN_CLOSED, 'Cancel'):
             break
+        elif event == "Update":
+            window['a0'].update(button_color='black')
+            print("In")
+            #window['a0'].update(image_data=image_read())
+
     window.close()
 
 if __name__ == "__main__":
