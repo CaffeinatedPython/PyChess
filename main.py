@@ -11,6 +11,7 @@
 
 import PySimpleGUI as sg
 import base64
+from PIL import Image, ImageTk
 
 class Square:
     def __init__(self, color, piece, occupied, name):
@@ -32,17 +33,15 @@ def create_board():
     for index in range(8):
         row = []
         for each in ["a", "b", "c", "d", "e", "f", "g", "h"]:
-            color = "white"
-            if index % 2 == 0 and each in ['a', 'c', 'e', 'g']:
-            # if index % 2 == 0 and each in ['b', 'd', 'f', 'h']:
-                color = 'black'
-            #elif index % 2 == 1 and each in['a', 'c', 'e', 'g']:
-            elif index % 2 == 1 and each in ['b', 'd', 'f', 'h']:
-                color = 'black'
-
+            color = "blue"
+            if (index % 2 == 0 and each in ['a', 'c', 'e', 'g']) or (index % 2 == 1 and each in ['b', 'd', 'f', 'h']):
+                color = 'grey'
             keyName = (each + str(index))
-            print(keyName)
-            row.append(sg.Button(button_text=keyName, button_color=color, size=(4,4), pad = (0,0), border_width=1, key=keyName))
+            #row.append(sg.Button(button_text=keyName, button_color=color, size=(2,2),
+            #                     pad = (0,0), border_width=1, key=keyName, use_ttk_buttons=True))
+            #                    #use_ttk_buttons was causing issues on Mac for mouse over
+            row.append(sg.Image(key=keyName, tooltip=keyName, background_color=color, size=(90,90), pad = (1,1),
+                                expand_x=True, expand_y=True, enable_events=True))
         board.insert(0,row)  #Needs insert instead of append otherwise backward
 
     return(board)
@@ -53,17 +52,10 @@ def create_window():
 
     layout = create_board()
 
-    layout += [[sg.Cancel(),sg.Button("Update")]]
+    layout += [[sg.Cancel(),sg.Button("New Game")]]
 
    # window = sg.Window('PyChess', layout)
     return(layout)
-
-
-def image_read():
-    #piecesFolder = 'images\'
-    with open("images\wpiece.png", "rb") as img_file:
-        piece = base64.b64encode(img_file.read())
-    return(piece)
 
 
 def main():
@@ -74,10 +66,10 @@ def main():
         event, values = window.read()
         if event in (sg.WIN_CLOSED, 'Cancel'):
             break
-        elif event == "Update":
-            window['a0'].update(button_color='black')
-            print("In")
-            #window['a0'].update(image_data=image_read())
+        elif event == "New Game":
+            new_game(window)
+            window['e0'].update(filename='images/kingb.png', size=(90,90))
+
 
     window.close()
 
